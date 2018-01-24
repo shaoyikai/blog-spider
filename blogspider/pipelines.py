@@ -38,9 +38,6 @@ class BlogspiderPipeline(object):
             cursorclass=pymysql.cursors.DictCursor
         )
 
-    def close_spider(self, spider):
-        self.db.close()
-
     def process_item(self, item, spider):
         created_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cursor = self.db.cursor()
@@ -48,3 +45,6 @@ class BlogspiderPipeline(object):
         cursor.execute(sql, (item['title'], item['content'], created_at))
         self.db.commit()
         return item
+
+    def close_spider(self, spider):
+        self.db.close()
